@@ -4,7 +4,12 @@ import com.example.redis_chapter01.pojo.Person;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.connection.RedisZSetCommands;
 import org.springframework.data.redis.core.RedisTemplate;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 @SpringBootTest
 class RedisChapter01ApplicationTests {
@@ -13,13 +18,13 @@ class RedisChapter01ApplicationTests {
 
     @Test
     void contextLoads() {
-        Person person = new Person();
-        person.setAge(11);
-        person.setName("小明");
-        redisTemplate.opsForValue().set("a", person);
-        Object a = redisTemplate.opsForValue().get("a");
-        System.out.println((Person)a);
-        System.out.println(a.getClass());
+//        redisTemplate.opsForSet().add("set1", "a", "b", "c");
+        redisTemplate.opsForSet().add("set2", "b", "e", "d");
+//        redisTemplate.opsForZSet().add("zset2", "c", 100);
+        redisTemplate.opsForZSet().add("zset2", "e", 133);
+        List<String> strings = Arrays.asList("set2");
+        redisTemplate.opsForZSet().intersectAndStore("zset2", strings, "set1", RedisZSetCommands.Aggregate.SUM);
+
     }
 
 }
